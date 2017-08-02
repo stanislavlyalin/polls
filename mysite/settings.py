@@ -3,6 +3,9 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
+STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '7#bx1ib-#eh5gq!a!t#ig+ej*sfy!+zjbvs!19&&mdchtdj(%#'
 
