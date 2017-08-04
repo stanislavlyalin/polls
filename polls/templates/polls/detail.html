@@ -9,4 +9,52 @@
     <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br />
 {% endfor %}
 <input type="submit" value="Vote" />
+
+<a id="download">Download</a>
+<div id="stop">Stop</div>
+
+
 </form>
+
+
+<script>
+  let shouldStop = false;
+  let stopped = false;
+  const downloadLink = document.getElementById('download');
+  const stopButton = document.getElementById('stop');
+
+  stopButton.addEventListener('click', function() {
+    shouldStop = true;
+  });
+
+  var handleSuccess = function(stream) {
+    const options = {
+        mimeType: 'video/webm;codecs=vp9',
+        audioBitsPerSecond: 8000};
+    recordedChunks = [];
+    mediaRecorder = new MediaRecorder(stream, options);
+
+    mediaRecorder.ondataavailable = function(e) {
+
+      if (e.data.size > 0) {
+        recordedChunks.push(e.data);
+      }
+
+      if(shouldStop === true && stopped === false) {
+        mediaRecorder.stop();
+        stopped = true;
+      }
+    };
+
+    mediaRecorder.onstop = function() {
+      downloadLink.href = URL.createObjectURL(new Blob(recordedChunks));
+      downloadLink.download = 'acetest.wav';
+    };
+
+    mediaRecorder.start(1000);
+  };
+
+  navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+      .then(handleSuccess);
+
+</script>
